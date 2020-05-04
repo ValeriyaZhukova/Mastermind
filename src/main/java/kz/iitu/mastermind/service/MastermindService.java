@@ -1,7 +1,7 @@
 package kz.iitu.mastermind.service;
 
-import kz.iitu.mastermind.models.Game;
-import kz.iitu.mastermind.models.Player;
+import kz.iitu.mastermind.model.Game;
+import kz.iitu.mastermind.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,67 +12,22 @@ import java.util.List;
 public class MastermindService {
 
     private Game game = new Game();
-    private Player player;
+    private User user;
     private List<Integer> secretCode = new ArrayList<>();
     private List<Integer> numbers = new ArrayList<>();
     private List<Integer> currentGuess = new ArrayList<>();
     private List<Character> result = new ArrayList<>();
+    int score = 0;
     int numberOfGuesses = 0;
 
-    public Game getGame()
+    public void setCurrentGuess(String guess)
     {
-        return game;
-    }
-
-    public void setGame(Game game)
-    {
-        this.game = game;
-    }
-
-    public Player getPlayer()
-    {
-        return player;
-    }
-
-    public void setPlayer(Player player)
-    {
-        this.player = player;
-    }
-
-    public List<Integer> getSecretCode()
-    {
-        return secretCode;
-    }
-
-    public void setSecretCode(List<Integer> secretCode)
-    {
-        this.secretCode = secretCode;
-    }
-
-    public List<Integer> getCurrentGuess()
-    {
-        return currentGuess;
-    }
-
-    public void setCurrentGuess(List<Integer> currentGuess) {
-        this.currentGuess = currentGuess;
-    }
-
-    public void setCurrentGuess(String guess) {
         List<Integer> newGuess = new ArrayList<>();
         for (int i = 0; i < 4; i++)
         {
             newGuess.add(Character.getNumericValue((int)(guess.charAt(i))));
         }
         this.currentGuess = newGuess;
-    }
-
-    public List<Character> getResult() {
-        return result;
-    }
-
-    public void setResult(List<Character> result) {
-        this.result = result;
     }
 
     public void generateSecretCode()
@@ -107,21 +62,13 @@ public class MastermindService {
             if(currentGuess.get(i) == secretCode.get(i))
             {
                 result.add('w');
+                score += 250;
             }
 
-            else if (currentGuess.get(i) == secretCode.get((i + 1) % 4))
+            else if (currentGuess.get(i) == secretCode.get((i + 1) % 4) || currentGuess.get(i) == secretCode.get((i + 2) % 4) || currentGuess.get(i) == secretCode.get((i + 3) % 4))
             {
                 result.add('b');
-            }
-
-            else if (currentGuess.get(i) == secretCode.get((i + 2) % 4))
-            {
-                result.add('b');
-            }
-
-            else if (currentGuess.get(i) == secretCode.get((i + 3) % 4))
-            {
-                result.add('b');
+                score += 100;
             }
 
             else
@@ -131,7 +78,6 @@ public class MastermindService {
         }
 
         numberOfGuesses++;
-
 
         for (int i = 0; i < 4; i++)
         {
@@ -150,10 +96,28 @@ public class MastermindService {
         {
             System.out.println("Try again!");
         }
-
-
-
     }
+
+    public void setGameAttributes(User user)
+    {
+        score = score / numberOfGuesses;
+
+        int secretNumber;
+        String secretNumberStr = "";
+
+        for (int i = 0; i < secretCode.size(); i++)
+        {
+            secretNumberStr += secretCode.get(i).toString();
+        }
+
+        secretNumber = Integer.parseInt(secretNumberStr);
+
+        game.setSecretNumber(secretNumber);
+        game.setNumberOfGuesses(numberOfGuesses);
+        game.setScore(score);
+        game.setUser(user);
+    }
+
 
 
 }

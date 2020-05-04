@@ -1,3 +1,4 @@
+/*
 package kz.iitu.mastermind;
 
 import kz.iitu.mastermind.config.SpringConfiguration;
@@ -16,7 +17,6 @@ public class Main {
 
         mastermind.play();
 
-
-
     }
 }
+*/
