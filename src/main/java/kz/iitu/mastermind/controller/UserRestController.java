@@ -26,7 +26,7 @@ import java.util.List;
     )
 
 @RestController
-@RequestMapping("/usersCRUD")
+@RequestMapping("/users")
 public class UserRestController {
 
     @Autowired
@@ -43,6 +43,19 @@ public class UserRestController {
     @GetMapping("/{id}")
     public User getUserById(@PathVariable("id") Long id) {
         return userService.getUserByID(id);
+    }
+
+    @ApiOperation(value	= "Register new user with username and password", response = User.class)
+    @PostMapping("/register/")
+    public User createUserByUsernamePassword(@RequestParam String username, @RequestParam String password)
+    {
+        User user = new User();
+        user.setPassword(password);
+        user.setUsername(username);
+
+        userService.createUser(user);
+        User newUser = (User) userService.loadUserByUsername(username);
+        return newUser;
     }
 
     @ApiOperation(value = "Find user by username", response = User.class)

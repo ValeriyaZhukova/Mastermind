@@ -37,7 +37,7 @@
 
     <div class="list-users">
         <div class="auth-btn">
-            <a href="/users">List users</a>
+            <a href="/list-users">List users</a>
         </div>
     </div>
 

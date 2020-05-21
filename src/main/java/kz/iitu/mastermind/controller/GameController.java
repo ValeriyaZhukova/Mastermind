@@ -5,8 +5,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import kz.iitu.mastermind.model.Game;
+import kz.iitu.mastermind.model.User;
 import kz.iitu.mastermind.service.GameService;
 import kz.iitu.mastermind.service.MastermindService;
+import kz.iitu.mastermind.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,8 +40,13 @@ public class GameController {
     @Autowired
     MastermindService mastermindService;
 
+    @Autowired
+    UserService userService;
+
+
+
     @ApiOperation(value = "List user games by user ID")
-    @RequestMapping(value = { "/games/{id}" }, method = RequestMethod.GET)
+    @RequestMapping(value = { "users/games/{id}" }, method = RequestMethod.GET)
     public ModelAndView listGames(@PathVariable("id") Long id)
     {
         List<Game> games = gameService.listGamesByUserID(id);
@@ -54,12 +61,18 @@ public class GameController {
         return "mastermind";
     }
 
-    /*@RequestMapping(value = {"/gamePlayed/"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/gamePlayed/"}, method = RequestMethod.POST)
     public String saveGame(Model model)
     {
-        Game game = new Game();
+        User currentUser = (User) userService.loadUserByUsername("lera");
         mastermindService.generateSecretCode();
-
+        while (!mastermindService.getGame().isWin()) {
+            mastermindService.setCurrentGuess("1234");
+            mastermindService.makeGuess("1234");
+            mastermindService.evaluateGuess(mastermindService.getCurrentGuess());
+        }
+        mastermindService.setGameAttributes(currentUser);
+        System.out.println(mastermindService.getGame().toString());
         return "index";
-    }*/
+    }
 }

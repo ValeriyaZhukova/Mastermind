@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import kz.iitu.mastermind.model.User;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,9 +31,10 @@ public class JwtTokenGeneratorFilter extends UsernamePasswordAuthenticationFilte
         this.authManager = authManager;
 
         // By default, UsernamePasswordAuthenticationFilter listens to "/login" path.
-        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/auth/login/", "POST"));
+        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/users/login", "POST"));
     }
 
+    @SneakyThrows
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
@@ -41,16 +43,19 @@ public class JwtTokenGeneratorFilter extends UsernamePasswordAuthenticationFilte
 
             // 1. Get credentials from request
             User creds = new ObjectMapper().readValue(request.getInputStream(), User.class);
-
+            System.out.println(request);
             // 2. Create auth object (contains credentials) which will be used by auth manager
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     creds.getUsername(), creds.getPassword(), Collections.emptyList());
-
+            System.out.println("creds: " + creds);
             // 3. Authentication manager authenticate the user, and use UserDetialsServiceImpl::loadUserByUsername() method to load the user.
             return authManager.authenticate(authToken);
-
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+        catch(Exception x)
+        {
+            throw new Exception(x);
         }
     }
 
@@ -75,5 +80,6 @@ public class JwtTokenGeneratorFilter extends UsernamePasswordAuthenticationFilte
         // Add token to header
         response.addHeader("Authorization", "Bearer " + token);
         response.getHeader(token);
+        System.out.println(token);
     }
 }

@@ -71,7 +71,7 @@
         <div class="form-header">
             <h2>Sign in</h2>
         </div>
-        <form name='login' action="login" method='POST' modelAttribute="user">
+        <form name='login' action="/users/login" method='POST' modelAttribute="user" >
             <table>
                 <tr>
                     <td>Username:</td>
@@ -103,10 +103,10 @@
                 console.log("userdata:" + userData);
                 $.ajax({
                     type : "POST",
-                    contentType : "application/json;charset=UTF-8",
-                    url : "login",
+                    contentType : "application/json",
+                    url : "/users/login",
                     data : JSON.stringify(userData),
-                    dataType : 'json',
+                    dataType : "json",
                     success : function(data) {
                         return data;
                     }

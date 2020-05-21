@@ -1,27 +1,17 @@
 package kz.iitu.mastermind.controller;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import kz.iitu.mastermind.config.JwtTokenGeneratorFilter;
-import kz.iitu.mastermind.model.Role;
 import kz.iitu.mastermind.model.User;
 import kz.iitu.mastermind.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Api
 @ApiResponses
@@ -47,14 +37,13 @@ public class LoginController {
         return "login-form";
     }
 
-    /*
     @ApiOperation(value = "Log in")
-    @RequestMapping(value = {"/login"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/logInSuccess"}, method = RequestMethod.GET)
     public String saveUser(Model model, @RequestBody User user)
     {
         model.addAttribute("user", user);
         return "login-success";
-    }*/
+    }
 
 
 }

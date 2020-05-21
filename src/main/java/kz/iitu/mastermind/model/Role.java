@@ -25,7 +25,14 @@ public class Role implements GrantedAuthority {
     private String role;
 
     @ToString.Exclude
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles",
+                cascade =
+                {
+                        CascadeType.DETACH,
+                        CascadeType.MERGE,
+                        CascadeType.REFRESH,
+                        CascadeType.PERSIST
+                })
     private List<User> users = new ArrayList<>();
 
     @Override

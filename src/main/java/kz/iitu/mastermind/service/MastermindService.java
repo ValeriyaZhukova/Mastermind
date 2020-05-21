@@ -2,6 +2,8 @@ package kz.iitu.mastermind.service;
 
 import kz.iitu.mastermind.model.Game;
 import kz.iitu.mastermind.model.User;
+import kz.iitu.mastermind.repository.GameRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,8 +22,20 @@ public class MastermindService {
     int score = 0;
     int numberOfGuesses = 0;
 
-    public void setCurrentGuess(String guess)
+    @Autowired
+    GameRepository gameRepository;
+
+
+    public Game getGame()
     {
+        return game;
+    }
+
+    public List<Integer> getCurrentGuess()
+    {
+        return currentGuess;
+    }
+    public void setCurrentGuess(String guess) {
         List<Integer> newGuess = new ArrayList<>();
         for (int i = 0; i < 4; i++)
         {
@@ -116,6 +130,8 @@ public class MastermindService {
         game.setNumberOfGuesses(numberOfGuesses);
         game.setScore(score);
         game.setUser(user);
+
+        gameRepository.saveAndFlush(game);
     }
 
 
